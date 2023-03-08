@@ -132,7 +132,6 @@ export default function Home() {
         // value signifies the cost of one crypto dev token which is "0.001" eth.
         // We are parsing `0.001` string to ether using the utils library from ethers.js
         value: utils.parseEther(value.toString()),
-        gasLimit: 2100000,
       });
       setLoading(true);
       // wait for the transaction to get mined
