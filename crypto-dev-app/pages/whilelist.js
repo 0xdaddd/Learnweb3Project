@@ -89,7 +89,7 @@ export default function Whilelist() {
       // have read-only access to the Contract
       const whitelistContract = new Contract(
         WHITELIST_CONTRACT_ADDRESS,
-        abi,
+        WHITELIST_CONTRACT_ABI,
         provider
       );
       // call the numAddressesWhitelisted from the contract
@@ -112,7 +112,7 @@ export default function Whilelist() {
       const signer = await getProviderOrSigner(true);
       const whitelistContract = new Contract(
         WHITELIST_CONTRACT_ADDRESS,
-        abi,
+        WHITELIST_CONTRACT_ABI,
         signer
       );
       // Get the address associated to the signer which is connected to  MetaMask
