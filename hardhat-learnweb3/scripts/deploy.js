@@ -25,13 +25,14 @@ async function main() {
     "Crypto Devs Token Contract Address:",
     deployedCryptoDevsTokenContract.address
   );
-  // Lock with 0.001ETH and unlock timestamp 1678293901 deployed to 0x7E3eD35419E8B80Cd823Ef7b4C1fF38b00f0667B
+  // Crypto Devs Token Contract Address: 0x2Bb1817F8F494F3Bc75F0438A166532252946190
 }
 
 // Call the main function and catch if there is any error
 main()
   .then(() => process.exit(0))
   .catch((error) => {
+    console.error("error");
     console.error(error);
     process.exit(1);
   });
