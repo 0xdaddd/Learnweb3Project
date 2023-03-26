@@ -1,11 +1,11 @@
 const { ethers } = require("hardhat");
 require("dotenv").config({ path: ".env" });
-const { 
-  DAO_CONTRACT_ADDRESS,
-  TOKEN_CONTRACT_ADDRESS, 
-  NFT_CONTRACT_ADDRESS,
-  WHITELIST_CONTRACT_ADDRESS
-} = require("../constants");
+// const { 
+//   DAO_CONTRACT_ADDRESS,
+//   TOKEN_CONTRACT_ADDRESS, 
+//   NFT_CONTRACT_ADDRESS,
+//   WHITELIST_CONTRACT_ADDRESS
+// } = require("../constants");
 
 // async function main() {
 //   // Address of the Crypto Devs NFT contract that you deployed in the previous module
@@ -62,30 +62,72 @@ const {
 //   // CryptoDevsDAO deployed to:  0x1aEf09c2032b52631147F5Cf544F52714798e265
 // }
 
+// async function main() {
+//   const cryptoDevTokenAddress = TOKEN_CONTRACT_ADDRESS;
+//   /*
+//   A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
+//   so exchangeContract here is a factory for instances of our Exchange contract.
+//   */
+//   const exchangeContract = await ethers.getContractFactory("Exchange");
+
+//   // here we deploy the contract
+//   const deployedExchangeContract = await exchangeContract.deploy(
+//     cryptoDevTokenAddress
+//   );
+//   await deployedExchangeContract.deployed();
+
+//   // print the address of the deployed contract
+//   console.log("Exchange Contract Address:", deployedExchangeContract.address);
+//   //Exchange Contract Address: 0xD6691bca33a7cfCb595309CBdb150396CC8159c9
+// }
+
+// async function main() {
+//   const verifyContract = await ethers.getContractFactory("Verify");
+//   // deploy the contract
+//   const deployedVerifyContract = await verifyContract.deploy();
+//   await deployedVerifyContract.deployed();
+//   // print the address of the deployed contract
+//   console.log("Verify Contract Address:", deployedVerifyContract.address);
+//   // Verify Contract Address: 0xB5f4b3f2308a1E9d899319a3b230B94362970e56
+
+//   console.log("Sleeping.....");
+//   // Wait for etherscan to notice that the contract has been deployed
+//   await sleep(40000);
+
+//   // Verify the contract after deploying
+//   await hre.run("verify:verify", {
+//     address: deployedVerifyContract.address,
+//     constructorArguments: [],
+//   });
+// }
+
 async function main() {
-  const cryptoDevTokenAddress = TOKEN_CONTRACT_ADDRESS;
+  // URL from where we can extract the metadata for a LW3Punks
+  const metadataURL = "ipfs://QmQBHarz2WFczTjz5GnhjHrbUPDnB48W5BM2v2h6HbE1rZ";
   /*
   A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
-  so exchangeContract here is a factory for instances of our Exchange contract.
+  so lw3PunksContract here is a factory for instances of our LW3Punks contract.
   */
-  const exchangeContract = await ethers.getContractFactory("Exchange");
+  const lw3PunksContract = await ethers.getContractFactory("LW3Punks");
 
-  // here we deploy the contract
-  const deployedExchangeContract = await exchangeContract.deploy(
-    cryptoDevTokenAddress
-  );
-  await deployedExchangeContract.deployed();
+  // deploy the contract
+  const deployedLW3PunksContract = await lw3PunksContract.deploy(metadataURL);
+
+  await deployedLW3PunksContract.deployed();
 
   // print the address of the deployed contract
-  console.log("Exchange Contract Address:", deployedExchangeContract.address);
-  //Exchange Contract Address: 0xD6691bca33a7cfCb595309CBdb150396CC8159c9
+  console.log("LW3Punks Contract Address:", deployedLW3PunksContract.address);
+  // LW3Punks Contract Address: 0x9469e29622E7784e42a4B08e6e04AaCd65b2942b
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Call the main function and catch if there is any error
 main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error("error");
-    console.error(error);
-    process.exit(1);
-  });
+.then(() => process.exit(0))
+.catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
