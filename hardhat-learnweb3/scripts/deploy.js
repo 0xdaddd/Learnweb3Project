@@ -1,5 +1,8 @@
 const { ethers } = require("hardhat");
 require("dotenv").config({ path: ".env" });
+
+const { FEE, VRF_COORDINATOR, LINK_TOKEN, KEY_HASH } = require("../constants");
+
 // const { 
 //   DAO_CONTRACT_ADDRESS,
 //   TOKEN_CONTRACT_ADDRESS, 
@@ -101,28 +104,64 @@ require("dotenv").config({ path: ".env" });
 //   });
 // }
 
+// async function main() {
+//   // URL from where we can extract the metadata for a LW3Punks
+//   const metadataURL = "ipfs://Qmbygo38DWF1V8GttM1zy89KzyZTPU2FLUzQtiDvB7q6i5/";
+//   /*
+//   A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
+//   so lw3PunksContract here is a factory for instances of our LW3Punks contract.
+//   */
+//   const lw3PunksContract = await ethers.getContractFactory("LW3Punks");
+
+//   // deploy the contract
+//   const deployedLW3PunksContract = await lw3PunksContract.deploy(metadataURL);
+
+//   await deployedLW3PunksContract.deployed();
+
+//   // print the address of the deployed contract
+//   console.log("LW3Punks Contract Address:", deployedLW3PunksContract.address);
+//   // ipfs://QmQBHarz2WFczTjz5GnhjHrbUPDnB48W5BM2v2h6HbE1rZ
+//   // LW3Punks Contract Address: 0x9469e29622E7784e42a4B08e6e04AaCd65b2942b
+//   // ipfs://QmQBHarz2WFczTjz5GnhjHrbUPDnB48W5BM2v2h6HbE1rZ/
+//   // LW3Punks Contract Address: 0xF870192B285E33eA63e66a8959f5443Ea0188887
+//   // ipfs://Qmbygo38DWF1V8GttM1zy89KzyZTPU2FLUzQtiDvB7q6i5/
+//   // LW3Punks Contract Address: 0x8e120fbd1665C9D85917229806b5261e8f5fF59B
+// }
+
+
 async function main() {
-  // URL from where we can extract the metadata for a LW3Punks
-  const metadataURL = "ipfs://Qmbygo38DWF1V8GttM1zy89KzyZTPU2FLUzQtiDvB7q6i5/";
   /*
-  A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
-  so lw3PunksContract here is a factory for instances of our LW3Punks contract.
-  */
-  const lw3PunksContract = await ethers.getContractFactory("LW3Punks");
-
+ A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
+ so randomWinnerGame here is a factory for instances of our RandomWinnerGame contract.
+ */
+  const randomWinnerGame = await ethers.getContractFactory("RandomWinnerGame");
   // deploy the contract
-  const deployedLW3PunksContract = await lw3PunksContract.deploy(metadataURL);
+  const deployedRandomWinnerGameContract = await randomWinnerGame.deploy(
+    VRF_COORDINATOR,
+    LINK_TOKEN,
+    KEY_HASH,
+    FEE
+  );
 
-  await deployedLW3PunksContract.deployed();
+  await deployedRandomWinnerGameContract.deployed();
 
   // print the address of the deployed contract
-  console.log("LW3Punks Contract Address:", deployedLW3PunksContract.address);
-  // ipfs://QmQBHarz2WFczTjz5GnhjHrbUPDnB48W5BM2v2h6HbE1rZ
-  // LW3Punks Contract Address: 0x9469e29622E7784e42a4B08e6e04AaCd65b2942b
-  // ipfs://QmQBHarz2WFczTjz5GnhjHrbUPDnB48W5BM2v2h6HbE1rZ/
-  // LW3Punks Contract Address: 0xF870192B285E33eA63e66a8959f5443Ea0188887
-  // ipfs://Qmbygo38DWF1V8GttM1zy89KzyZTPU2FLUzQtiDvB7q6i5/
-  // LW3Punks Contract Address: 0x8e120fbd1665C9D85917229806b5261e8f5fF59B
+  console.log(
+    "Verify Contract Address:",
+    deployedRandomWinnerGameContract.address
+  );
+  // Verify Contract Address: 0xBd0da98fD15973CD17c530fE8D7807Eb85EC38a3
+
+  console.log("Sleeping.....");
+  // Wait for etherscan to notice that the contract has been deployed
+  await sleep(30000);
+
+  // Verify the contract after deploying
+  await hre.run("verify:verify", {
+    address: deployedRandomWinnerGameContract.address,
+    constructorArguments: [VRF_COORDINATOR, LINK_TOKEN, KEY_HASH, FEE],
+  });
+  // The contract 0xBd0da98fD15973CD17c530fE8D7807Eb85EC38a3 has already been verified
 }
 
 function sleep(ms) {
